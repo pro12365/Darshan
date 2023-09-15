@@ -1,56 +1,44 @@
+#most accurate code
+# Import os to set API key
 import os
-from flask import Flask, request, jsonify
+# Import OpenAI as main LLM service
 from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
+# Bring in streamlit for UI/app interface
+import streamlit as st
+
+# Import PDF document loaders...there's other ones as well!
 from langchain.document_loaders import PyPDFLoader
-from langchain.vectorstores import MongoDBAtlasVectorSearch
+# Import chroma as the vector store 
+from langchain.vectorstores import Chroma
+
+# Import vector store stuff
 from langchain.agents.agent_toolkits import (
     create_vectorstore_agent,
     VectorStoreToolkit,
-    VectorStoreInfo,
+    VectorStoreInfo
 )
-from pymongo import MongoClient
 
-# Set up MongoDB Atlas connection
-# Replace 'YOUR_CONNECTION_STRING' with your actual MongoDB Atlas connection string
-mongo_client = MongoClient('mongodb+srv://priyanshurouth:Paromita@model.chpqwbx.mongodb.net/?retryWrites=true&w=majority')
-db = mongo_client['mydb']  # Replace 'mydb' with your database name
-
-# Check if MongoDB is connected
-try:
-    mongo_client.server_info()  # This will raise an exception if MongoDB is not connected
-    print("Connected to MongoDB Atlas")
-except Exception as e:
-    print(f"Failed to connect to MongoDB Atlas: {str(e)}")
-
-# Import OpenAI API key
-os.environ['OPENAI_API_KEY'] = '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'
+# Set API key for OpenAI Service
+os.environ['OPENAI_API_KEY'] = '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'
 
 # Create instance of OpenAI LLM
 llm = OpenAI(temperature=0.1, verbose=True)
 embeddings = OpenAIEmbeddings()
 
-# Create and load PDF Loader
-loader = PyPDFLoader('Divorce.pdf')
+# Create and load PDF Loader for legal documentation
+loader = PyPDFLoader('legal_documentation.pdf')  # Update the PDF file name
+# Split pages from pdf 
 pages = loader.load_and_split()
+# Load documents into vector database aka ChromaDB
+store = Chroma.from_documents(pages, embeddings, collection_name='legal_documentation')  # Update the collection name
 
-# Create and load documents into MongoDB-based vector database
-store = MongoDBAtlasVectorSearch(
-    collection=db['mydb'],  # Specify your desired collection
-    embedding=OpenAIEmbeddings(),   # Specify your embedding model
-    text_key='text_field_name',     # Specify the text field name
-    embedding_key='embedding_field_name',  # Specify the embedding field name
-    index_name='my_search_index'    # Specify your custom search index name
-)
-store.insert_documents(pages, embeddings)
-
-# Create vectorstore info object
+# Create vectorstore info object - metadata repo?
 vectorstore_info = VectorStoreInfo(
-    name="Divorce.pdf",
-    description="A Divorce petition filed by husband",
+    name="legal_documentation",  # Update the name
+    description="Legal documentation PDF",
     vectorstore=store
 )
-
 # Convert the document store into a langchain toolkit
 toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
 
@@ -60,27 +48,20 @@ agent_executor = create_vectorstore_agent(
     toolkit=toolkit,
     verbose=True
 )
+st.title('👩🏻‍⚖️🏛️⚖ Legal Assistant Powered by GPT 3.5')
+# Create a text input box for the user
+prompt = st.text_input('Input your prompt here')
 
-# Create a Flask application instance
-app = Flask(__name__)
-
-@app.route('/generate', methods=['POST'])
-def generate_response():
-    # Get the prompt from the request
-    prompt = request.json['prompt']
-
-    # Check if the prompt is provided
-    if not prompt:
-        return jsonify({'error': 'Prompt is required'}), 400
-
-    # Generate a response using the LLM
+# If the user hits enter
+if prompt:
+    # Then pass the prompt to the LLM
     response = agent_executor.run(prompt)
+    # ...and write it out to the screen
+    st.write(response)
 
-    # Find document similarity
-    search = store.similarity_search_with_score(prompt)
-    top_similar_page = search[0][0].page_content
-
-    return jsonify({'response': response, 'top_similar_page': top_similar_page})
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    # With a streamlit expander  
+    with st.expander('Document Similarity Search'):
+        # Find the relevant pages
+        search = store.similarity_search_with_score(prompt) 
+        # Write out the first 
+        st.write(search[0][0].page_content)
