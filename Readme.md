@@ -46,10 +46,6 @@ Naydarshan AI is a legal document assistant powered by GPT-3, a state-of-the-art
 
 You can customize the app by modifying the `Naystyle.css` file to change the app's styling.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - This application made with Streamlit Framework.
