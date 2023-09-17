@@ -1,23 +1,65 @@
-# LEGAL ASSISTANT POWERED BY GPT 3.5 - Streamlit App README
 
-This README provides instructions on how to run the GPT Investment Banker Streamlit app, enter a prompt, and obtain results.
+```markdown
+# Naydarshan AI - Legal Document Assistant
 
-## Prerequisites
+![Naydarshan AI]
 
-Before you begin, ensure you have the following installed:
+Naydarshan AI is a legal document assistant powered by GPT-3, a state-of-the-art language model developed by OpenAI. It can help you draft legal documents with ease.
 
-- Python: You can download it from [Python's official website](https://www.python.org/downloads/).
+## Features
 
-## Installation
+- Enter a legal query or prompt.
+- Click the "Search" button to retrieve relevant legal information.
+- View your prompt history in the sidebar.
+- Get generated legal document content.
 
-1. Clone the repository to your local machine:
+## Getting Started
 
-   ```bash
-   git clone https://github.com/yourusername/your-repo.git
- cd your repo
-## DEPENDENCIES
-pip install langchain streamlit tiktoken pycryptodome openai 
-## RUN THE PYTHON APP
-1. python3 Darshan2.py
-## Runscript
-2. streamlit run Darshan2.py
+1. Clone this repository:
+
+   ```
+   git clone https://github.com/pro12365/Darshan.git
+   ```
+
+2. Install the required packages:
+
+   ```
+   pip install streamlit streamlit_scrollable_textbox
+   ```
+
+3. Run the Streamlit app:
+
+   ```
+   streamlit run Naydarshan.py
+   ```
+
+## Usage
+
+1. Enter your legal query or prompt in the text input field.
+
+2. Click the "Search" button to start the search.
+
+3. View the generated legal document content in the main area.
+
+4. Check the sidebar for your prompt history.
+
+## Customize
+
+You can customize the app by modifying the `Naystyle.css` file to change the app's styling.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- This application made with Streamlit Framework.
+
+## Contact
+
+For any questions or inquiries, please contact niladri60 (mailto:niladri.nandy2names@gmail.com).
+
+Happy legal document drafting with Naydarshan AI!
+```
+
+Replace the placeholders (`INSERT_LOGO_URL_HERE` and `INSERT_REPOSITORY_URL_HERE`) with actual URLs and information specific to your application. Additionally, ensure you have a `LICENSE` file with your chosen license in the same directory as the README.md file.
