@@ -1,8 +1,7 @@
 
-```markdown
-# Naydarshan AI - Legal Document Assistant
+# Naydarshan AI - Legal Document Assistant(UI)
 
-![Naydarshan AI]
+Naydarshan AI
 
 Naydarshan AI is a legal document assistant powered by GPT-3, a state-of-the-art language model developed by OpenAI. It can help you draft legal documents with ease.
 
@@ -57,9 +56,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For any questions or inquiries, please contact niladri60 (mailto:niladri.nandy2names@gmail.com).
+For any questions or inquiries, please contact niladri60 (mailto: niladri.nandy2names@gmail.com).
 
 Happy legal document drafting with Naydarshan AI!
-```
-
-Replace the placeholders (`INSERT_LOGO_URL_HERE` and `INSERT_REPOSITORY_URL_HERE`) with actual URLs and information specific to your application. Additionally, ensure you have a `LICENSE` file with your chosen license in the same directory as the README.md file.
