@@ -1,0 +1,16 @@
+/* Hide Streamlit Branding */
+#MainMenu {
+  visibility: hidden;
+}
+footer {visibility: hidden;}
+header {
+  visibility: hidden;
+}
+
+.css-pxxe24 {
+  visibility: hidden;
+}
+
+.button {
+  color: tan;
+}
