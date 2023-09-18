@@ -20,22 +20,22 @@ from langchain.agents.agent_toolkits import (
 )
 
 # Set API key for OpenAI Service
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = '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'
 
 # Create instance of OpenAI LLM
 llm = OpenAI(temperature=0.1, verbose=True)
 embeddings = OpenAIEmbeddings()
 
 # Create and load PDF Loader for legal documentation
-loader = PyPDFLoader('legal_documentation.pdf')  # Update the PDF file name
+loader = PyPDFLoader('Legal.pdf')  # Update the PDF file name
 # Split pages from pdf 
 pages = loader.load_and_split()
 # Load documents into vector database aka ChromaDB
-store = Chroma.from_documents(pages, embeddings, collection_name='legal_documentation')  # Update the collection name
+store = Chroma.from_documents(pages, embeddings, collection_name='Legal')  # Update the collection name
 
 # Create vectorstore info object - metadata repo?
 vectorstore_info = VectorStoreInfo(
-    name="legal_documentation",  # Update the name
+    name="Legal",  # Update the name
     description="Legal documentation PDF",
     vectorstore=store
 )
