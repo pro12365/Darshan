@@ -1,18 +1,10 @@
-#most accurate code
-# Import os to set API key
 import os
-# Import OpenAI as main LLM service
 from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
-# Bring in streamlit for UI/app interface
 import streamlit as st
-
-# Import PDF document loaders...there's other ones as well!
+import streamlit_scrollable_textbox as stx
 from langchain.document_loaders import PyPDFLoader
-# Import chroma as the vector store 
 from langchain.vectorstores import Chroma
-
-# Import vector store stuff
 from langchain.agents.agent_toolkits import (
     create_vectorstore_agent,
     VectorStoreToolkit,
@@ -20,48 +12,51 @@ from langchain.agents.agent_toolkits import (
 )
 
 # Set API key for OpenAI Service
-os.environ['OPENAI_API_KEY'] = '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'
-
-# Create instance of OpenAI LLMstre
+os.environ['OPENAI_API_KEY'] = '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'
 llm = OpenAI(temperature=0.1, verbose=True)
 embeddings = OpenAIEmbeddings()
-
-# Create and load PDF Loader for legal documentation
-loader = PyPDFLoader('Legal.pdf')  # Update the PDF file name
-# Split pages from pdf 
+loader = PyPDFLoader('Legal5.pdf')
 pages = loader.load_and_split()
-# Load documents into vector database aka ChromaDB
-store = Chroma.from_documents(pages, embeddings, collection_name='Legal')  # Update the collection name
-
-# Create vectorstore info object - metadata repo?
+store = Chroma.from_documents(pages, embeddings, collection_name='Legal5')
 vectorstore_info = VectorStoreInfo(
-    name="Legal",  # Update the name
+    name="Legal5",
     description="Legal documentation PDF",
     vectorstore=store
 )
-# Convert the document store into a langchain toolkit
 toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
-
-# Add the toolkit to an end-to-end LC
 agent_executor = create_vectorstore_agent(
     llm=llm,
     toolkit=toolkit,
     verbose=True
 )
-st.title('👩🏻‍⚖️🏛️⚖ Legal Assistant Powered by GPT 3.5')
-# Create a text input box for the user
-prompt = st.text_input('Input your prompt here')
+st.set_page_config(page_title="Naydarshan AI", page_icon="📄")
 
-# If the user hits enter
-if prompt:
-    # Then pass the prompt to the LLM
+st.title('👩🏻‍⚖️🏛️⚖ Legal Document Assistant')
+st.write(
+    """This is a Prototype of Naydarshan AI, a legal document assistant that can help you draft legal documents. It 
+    is powered by GPT-3, a state-of-the-art language model developed by OpenAI. To get started, enter a prompt in the 
+    text box below and click the "Search" button. You can also view your prompt history in the sidebar.""")
+
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+
+local_css("Naystyle.css")
+prompt = st.text_input('Enter your query here:')
+prompt_history = st.session_state.get("prompt_history", [])
+search_button = st.button("Search", key="search_button", help="Click to search")
+if search_button:
+
     response = agent_executor.run(prompt)
-    # ...and write it out to the screen
-    st.write(response)
-
-    # With a streamlit expander  
+    st.write("Your Response:", response)
+    prompt_history.insert(0, prompt)
+    st.session_state.prompt_history = prompt_history
     with st.expander('Document Similarity Search'):
-        # Find the relevant pages
-        search = store.similarity_search_with_score(prompt) 
-        # Write out the first 
+        search = store.similarity_search_with_score(prompt)
         st.write(search[0][0].page_content)
+
+st.sidebar.title("Prompt History")
+for i, history_prompt in enumerate(prompt_history, 1):
+    st.sidebar.write(f"{i}. {history_prompt}")
