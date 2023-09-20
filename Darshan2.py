@@ -12,14 +12,14 @@ from langchain.agents.agent_toolkits import (
 )
 
 # Set API key for OpenAI Service
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = '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'
 llm = OpenAI(temperature=0.1, verbose=True)
 embeddings = OpenAIEmbeddings()
-loader = PyPDFLoader('Legal5.pdf')
+loader = PyPDFLoader('new1.pdf')
 pages = loader.load_and_split()
-store = Chroma.from_documents(pages, embeddings, collection_name='Legal5')
+store = Chroma.from_documents(pages, embeddings, collection_name='new1')
 vectorstore_info = VectorStoreInfo(
-    name="Legal5",
+    name="new1",
     description="Legal documentation PDF",
     vectorstore=store
 )
@@ -29,12 +29,11 @@ agent_executor = create_vectorstore_agent(
     toolkit=toolkit,
     verbose=True
 )
-st.set_page_config(page_title="Naydarshan AI", page_icon="📄")
+st.set_page_config(page_title="Naydarshan AI", page_icon="⚖️")
 
-st.title('👩🏻‍⚖️🏛️⚖ Legal Document Assistant')
+st.title("""⚖️ Legal Document Assistant 🏛️""")
 st.write(
-    """This is a Prototype of Naydarshan AI, a legal document assistant that can help you draft legal documents. It 
-    is powered by GPT-3, a state-of-the-art language model developed by OpenAI. To get started, enter a prompt in the 
+    """This is a Prototype of Naydarshan AI, a legal document assistant that can help you draft legal documents. To get started, enter a prompt in the 
     text box below and click the "Search" button. You can also view your prompt history in the sidebar.""")
 
 
